@@ -1,0 +1,19 @@
+@keyframes left-hide {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-200%);
+  }
+}
+
+@keyframes left-show {
+  0%,
+  100% {
+    transform: translateX(-200%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
