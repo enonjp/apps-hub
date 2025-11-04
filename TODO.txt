@@ -1,2 +1,0 @@
-Add popover for the user icon and log out function (remove token)
-Fix the problem after login the header buttons not appear
