@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import { LiaUserClockSolid } from 'react-icons/lia';
@@ -17,6 +17,7 @@ const Layout = ({ children }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogged, setIsLogged] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const token = window.localStorage.getItem('token-appcenter');
@@ -43,6 +44,21 @@ const Layout = ({ children }: Props) => {
     setIsLogged(false);
     window.location.reload();
   };
+
+  useEffect(() => {
+    const handleClickOutsideMobileMenu = (event: MouseEvent) => {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutsideMobileMenu);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideMobileMenu);
+    };
+  }, []);
 
   return (
     <>
@@ -89,15 +105,14 @@ const Layout = ({ children }: Props) => {
         <div className='flex-1 overflow-auto'>{children}</div>
         {/* Mobile Menu  */}
         <div
+          ref={mobileMenuRef}
           style={{
             width: '50vw',
             backdropFilter: 'blur(10px)',
             transform: isMenuOpen ? 'translateX(0)' : 'translateX(-120%)',
             transition: 'transform 0.3s ease-in-out',
           }}
-          className='absolute
-         left-0 top-0 h-screen bg-clip-padding bg-opacity-20 border border-gray-400 rounded-md flex flex-col gap-4 p-4
-        '
+          className='absolute left-0 top-0 h-screen bg-clip-padding bg-opacity-20 border border-gray-400 rounded-md flex flex-col gap-4 p-4'
         >
           <div onClick={handleToggleMenu}>
             <MdClose size={30} />
