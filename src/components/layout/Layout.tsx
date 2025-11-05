@@ -8,6 +8,7 @@ import { IoSettingsOutline, IoExitOutline } from 'react-icons/io5';
 import CustomPopover from '../CustomPopOver';
 import { Button } from '../ui/button';
 import CustomModal from '../CustomModal';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 type Props = {
   children: React.ReactNode;
@@ -15,17 +16,9 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLogged, setIsLogged] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const token = window.localStorage.getItem('token-appcenter');
-    if (token) {
-      console.log('Token found:', token);
-      setIsLogged(true);
-    }
-  }, []);
+  const { isAuthenticated, handleSetIsAuthenticated } = useGlobalContext();
 
   const handleToggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -41,8 +34,8 @@ const Layout = ({ children }: Props) => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('token-appcenter');
-    setIsLogged(false);
-    window.location.reload();
+    handleSetIsAuthenticated(false);
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -66,7 +59,7 @@ const Layout = ({ children }: Props) => {
         <div className='flex justify-between p-2 flex-shrink-0'>
           {/* Header */}
           <div>
-            {isLogged && (
+            {isAuthenticated && (
               <div>
                 <FiMenu size={30} onClick={handleToggleMenu} />
               </div>
@@ -74,7 +67,7 @@ const Layout = ({ children }: Props) => {
           </div>
           <p className=' font-bold'>Apps Center</p>
           <div>
-            {isLogged && (
+            {isAuthenticated && (
               <CustomPopover trigger={<FaRegUserCircle size={30} />}>
                 <h4 className='py-2 font-bold'>User Account</h4>
                 <hr />

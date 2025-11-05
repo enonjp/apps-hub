@@ -4,6 +4,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import loginSchema from '@/validations/login';
+import useLogin from '@/hooks/LoginHook';
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -15,6 +16,7 @@ interface IFormInputs {
 }
 
 function RouteComponent() {
+  const { handleLoginRequest } = useLogin();
   const navigate = useNavigate();
 
   const {
@@ -30,11 +32,11 @@ function RouteComponent() {
   });
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) => {
-    // Simulate successful login by storing a token
-    window.localStorage.setItem('token-appcenter', 'dummy-token');
+    handleLoginRequest(data.email, data.password);
+  };
 
-    // Navigate to home page after successful login
-    navigate({ to: '/' });
+  const handleRedirectToSignup = () => {
+    navigate({ to: '/signup' });
   };
 
   return (
@@ -64,6 +66,11 @@ function RouteComponent() {
             Login
           </Button>
         </form>
+        <div className=' flex mt-4 justify-center'>
+          <Button onClick={handleRedirectToSignup} variant={'link'}>
+            Don't have an account? Sign Up
+          </Button>
+        </div>
       </div>
     </div>
   );
