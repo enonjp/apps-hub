@@ -39,6 +39,8 @@ export const GlobalContextProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     if (!isAuthenticated) {
       navigation({ to: '/login' });
+    } else {
+      navigation({ to: '/' });
     }
   }, [isAuthenticated]);
 
