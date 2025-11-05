@@ -41,6 +41,9 @@ function RouteComponent() {
 
   return (
     <div className='px-4 h-full flex flex-col justify-center'>
+      <div className='flex justify-center'>
+        <h1 className='text-3xl font-bold mb-2'>Welcome Back</h1>
+      </div>
       <div className=' max-w-md'>
         <form className='flex flex-col gap-3' onSubmit={handleSubmit(onSubmit)}>
           <p>Email</p>
