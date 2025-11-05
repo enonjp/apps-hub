@@ -16,7 +16,7 @@ interface IFormInputs {
 }
 
 function RouteComponent() {
-  const { handleLoginRequest } = useLogin();
+  const { handleLoginRequest, isLoading } = useLogin();
   const navigate = useNavigate();
 
   const {
@@ -65,7 +65,7 @@ function RouteComponent() {
               Forgot Password?
             </Button>
           </div>
-          <Button type='submit' className='mt-4 '>
+          <Button type='submit' className='mt-4' isLoading={isLoading}>
             Login
           </Button>
         </form>
