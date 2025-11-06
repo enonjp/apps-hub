@@ -9,6 +9,7 @@ import CustomPopover from '../CustomPopOver';
 import { Button } from '../ui/button';
 import CustomModal from '../CustomModal';
 import { useGlobalContext } from '@/context/GlobalContext';
+import Avvvatars from 'avvvatars-react';
 
 type Props = {
   children: React.ReactNode;
@@ -68,7 +69,9 @@ const Layout = ({ children }: Props) => {
           <p className=' font-bold'>Apps Center</p>
           <div>
             {isAuthenticated && (
-              <CustomPopover trigger={<FaRegUserCircle size={30} />}>
+              <CustomPopover
+                trigger={<Avvvatars value='dummy@email.com' style='shape' />}
+              >
                 <h4 className='py-2 font-bold'>User Account</h4>
                 <hr />
                 <div className=' flex flex-col gap-2 mt-2'>
