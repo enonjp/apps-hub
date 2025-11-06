@@ -1,7 +1,25 @@
+import { Button } from '@/components/ui/button';
+
 const TimeRecordTable = () => {
   return (
     <div>
-      <h3 className='text-lg font-medium mb-4'>Time Records</h3>
+      <div className='flex justify-between items-start flex-col mb-4'>
+        <h3 className='text-lg font-bold mb-2'>Time Records</h3>
+        <div className='flex gap-4 items-center'>
+          <div>
+            <p>
+              From: <span>01/01/2023</span>
+            </p>
+            <hr />
+            <p>
+              To: <span>01/31/2023</span>
+            </p>
+          </div>
+          <div>
+            <Button variant='outline'>Change Date Range</Button>
+          </div>
+        </div>
+      </div>
       <table className='w-full table-auto border-collapse border border-gray-300'>
         <thead>
           <tr>
