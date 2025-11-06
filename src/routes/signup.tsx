@@ -48,9 +48,9 @@ function RouteComponent() {
       <div className='flex justify-center'>
         <h1 className='text-3xl font-bold mb-4'>Create an Account</h1>
       </div>
-      <div className=' max-w-md'>
+      <div className=' max-w-md w-full mx-auto'>
         <form className='flex flex-col gap-3' onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex gap-4'>
+          <div className='flex gap-4 justify-between'>
             <div>
               <p>First Name</p>
               <Controller

@@ -101,6 +101,8 @@ const Layout = ({ children }: Props) => {
           ref={mobileMenuRef}
           style={{
             width: '50vw',
+            maxWidth: '300px',
+            minWidth: '200px',
             backdropFilter: 'blur(10px)',
             transform: isMenuOpen ? 'translateX(0)' : 'translateX(-120%)',
             transition: 'transform 0.3s ease-in-out',
