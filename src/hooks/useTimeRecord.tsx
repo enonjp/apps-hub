@@ -7,7 +7,7 @@ type timeStatusType = 'WORKING' | 'BREAK' | 'FINISHED' | 'NOT_STARTED';
 const useTimeRecord = () => {
   const [timeStatus, setTimeStatus] = useState<timeStatusType>('NOT_STARTED');
 
-  const handleStartWork = (timeData: TimeRecordBody) => {
+  const handleStartWork = () => {
     try {
       //   const resp = await backendApi.post('/start-work-session', timeData);
       setTimeStatus('WORKING');
@@ -17,7 +17,7 @@ const useTimeRecord = () => {
     }
   };
 
-  const handleStartBreak = (timeData: TimeRecordBody) => {
+  const handleStartBreak = () => {
     try {
       //   const resp = backendApi.post('/start-break', timeData);
       setTimeStatus('BREAK');
@@ -27,7 +27,7 @@ const useTimeRecord = () => {
     }
   };
 
-  const handleEndBreak = (timeData: TimeRecordBody) => {
+  const handleEndBreak = () => {
     try {
       //   const resp = backendApi.post('/end-break', timeData);
       setTimeStatus('WORKING');
@@ -37,7 +37,7 @@ const useTimeRecord = () => {
     }
   };
 
-  const handleEndWork = (timeData: TimeRecordBody) => {
+  const handleEndWork = () => {
     try {
       //   const resp = backendApi.post('/end-work-session', timeData);
       setTimeStatus('FINISHED');

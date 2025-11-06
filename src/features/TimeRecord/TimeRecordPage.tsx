@@ -3,9 +3,17 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { FaSquare, FaPlay, FaPause } from 'react-icons/fa';
 import TimeRecordTable from './TimeRecordTable';
+import useTimeRecord from '@/hooks/useTimeRecord';
 
 const TimeRecordPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const {
+    timeStatus,
+    handleStartWork,
+    handleStartBreak,
+    handleEndBreak,
+    handleEndWork,
+  } = useTimeRecord();
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -22,7 +30,11 @@ const TimeRecordPage = () => {
       </div>
       <div className='grid grid-cols-3 grid-rows-9 gap-4 h-64 pt-8'>
         <div className='col-start-1 col-end-2 row-start-5 row-end-9 w-full h-full rounded-full'>
-          <button className='time-record-button w-28 h-28  border border-white rounded-full flex justify-center items-center shadow-blue-300 shadow-md cursor-pointer'>
+          <button
+            onClick={handleEndBreak}
+            disabled={timeStatus !== 'BREAK'}
+            className='time-record-button w-28 h-28  border border-white rounded-full flex justify-center items-center shadow-blue-300 shadow-md cursor-pointer'
+          >
             <FaSquare size={30} />
           </button>
           <span className='flex justify-center mt-2'>Stop Break</span>
@@ -32,7 +44,12 @@ const TimeRecordPage = () => {
             <span className=' text-xl'>00:00</span>
           </div>
           <button
-            disabled
+            onClick={handleStartWork}
+            disabled={
+              timeStatus === 'NOT_STARTED' || timeStatus === 'FINISHED'
+                ? false
+                : true
+            }
             className='time-record-button w-28 h-28  border border-white rounded-full flex justify-center items-center shadow-blue-300 shadow-md cursor-pointer'
           >
             <FaPlay size={30} />
@@ -43,7 +60,11 @@ const TimeRecordPage = () => {
           <div className='flex justify-center pb-2 absolute top-0 -translate-y-8 left-2/4 transform -translate-x-1/2'>
             <span className=' text-xl'>00:00</span>
           </div>
-          <button className='time-record-button w-28 h-28  border border-white rounded-full flex justify-center items-center shadow-blue-300 shadow-md cursor-pointer'>
+          <button
+            onClick={handleStartBreak}
+            disabled={timeStatus !== 'WORKING'}
+            className='time-record-button w-28 h-28  border border-white rounded-full flex justify-center items-center shadow-blue-300 shadow-md cursor-pointer'
+          >
             <FaPause size={30} />
           </button>
           <span className='flex justify-center mt-2'>Break Time</span>
@@ -64,7 +85,10 @@ const TimeRecordPage = () => {
         }
         isModalOpen={isModalOpen}
         onClose={handleCloseModal}
-        onAccept={handleCloseModal}
+        onAccept={() => {
+          handleEndWork();
+          handleCloseModal();
+        }}
       >
         <p>Are you sure you want to end your working time?</p>
       </CustomModal>
