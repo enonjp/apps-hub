@@ -72,6 +72,7 @@ const TimeRecordPage = () => {
       </div>
       <div className='flex justify-center'>
         <Button
+          disabled={timeStatus === 'NOT_STARTED' || timeStatus === 'FINISHED'}
           onClick={handleOpenModal}
           variant={'destructive'}
           className='w-full mt-12 max-w-62'
