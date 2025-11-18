@@ -1,6 +1,7 @@
 import backendApi from '@/lib/axios';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import dayjs from 'dayjs';
 
 type timeStatusType = 'WORKING' | 'BREAK' | 'FINISHED' | 'NOT_STARTED';
 
@@ -9,16 +10,15 @@ const useTimeRecord = () => {
 
   const handleStartWork = async () => {
     try {
-      const dummyStartData: TimeRecordBody = {
+      const startWorkBody: TimeRecordBody = {
         reqHd: {
           userId: 1,
-          workDate: '2023-10-10',
-          startTime: '12:00:00',
+          workDate: dayjs().format('YYYY-MM-DD'),
+          startTime: dayjs().format('HH:mm:ss'),
           endTime: null,
         },
       };
-      const resp = await backendApi.post('/start-work-session', dummyStartData);
-      console.log('Response:', resp.data);
+      await backendApi.post('/start-work-session', startWorkBody);
       setTimeStatus('WORKING');
     } catch (error) {
       console.error('Error starting work:', error);
@@ -26,11 +26,17 @@ const useTimeRecord = () => {
     }
   };
 
-  // TODO: Replace dummy data with actual time data when integrating fully
-  const handleStartBreak = async (timeData: TimeRecordBody) => {
+  const handleStartBreak = async () => {
     try {
-      const resp = await backendApi.post('/start-break', dummyStartData);
-      console.log('Response:', resp.data);
+      const startBreakBody: TimeRecordBody = {
+        reqHd: {
+          userId: 1,
+          workDate: dayjs().format('YYYY-MM-DD'),
+          startTime: dayjs().format('HH:mm:ss'),
+          endTime: null,
+        },
+      };
+      await backendApi.post('/start-break', startBreakBody);
       setTimeStatus('BREAK');
     } catch (error) {
       console.error('Error starting break:', error);
@@ -38,11 +44,18 @@ const useTimeRecord = () => {
     }
   };
 
-  // TODO: Replace dummy data with actual time data when integrating fully
-  const handleEndBreak = async (timeData: TimeRecordBody) => {
+  const handleEndBreak = async () => {
     try {
-      const resp = await backendApi.post('/end-break', timeData);
-      console.log('Response:', resp.data);
+      const endBreakBody: TimeRecordBody = {
+        reqHd: {
+          userId: 1,
+          workDate: dayjs().format('YYYY-MM-DD'),
+          startTime: dayjs().format('HH:mm:ss'),
+          endTime: null,
+        },
+      };
+
+      await backendApi.post('/end-break', endBreakBody);
       setTimeStatus('WORKING');
     } catch (error) {
       console.error('Error ending break:', error);
@@ -50,11 +63,17 @@ const useTimeRecord = () => {
     }
   };
 
-  // TODO: Replace dummy data with actual time data when integrating fully
-  const handleEndWork = async (timeData: TimeRecordBody) => {
+  const handleEndWork = async () => {
     try {
-      const resp = await backendApi.post('/end-work-session', timeData);
-      console.log('Response:', resp.data);
+      const endWorkBody: TimeRecordBody = {
+        reqHd: {
+          userId: 1,
+          workDate: dayjs().format('YYYY-MM-DD'),
+          startTime: dayjs().format('HH:mm:ss'),
+          endTime: dayjs().format('HH:mm:ss'),
+        },
+      };
+      await backendApi.post('/end-work-session', endWorkBody);
       setTimeStatus('FINISHED');
     } catch (error) {
       console.error('Error ending work:', error);

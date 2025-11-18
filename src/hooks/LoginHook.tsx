@@ -12,7 +12,10 @@ const useLogin = () => {
   const handleLoginRequest = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      const resp = await backendApi.post('/auth/signin', { email, password });
+      const resp = await backendApi.post('/api/auth/signin', {
+        email,
+        password,
+      });
       const token = resp.data.accessToken;
       window.localStorage.setItem('token-appcenter', token);
       handleSetIsAuthenticated(true);

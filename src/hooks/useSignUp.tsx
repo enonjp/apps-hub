@@ -17,7 +17,7 @@ const useSignUp = () => {
   const handleCreateAccount = async (data: SignUpData) => {
     try {
       setIsLoading(true);
-      await backendApi.post('/auth/signup', {
+      await backendApi.post('/api/auth/signup', {
         reqHd: data,
       });
       toast.success('Account created successfully!');

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { FaRegUserCircle } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import { LiaUserClockSolid } from 'react-icons/lia';
 import { MdClose } from 'react-icons/md';
