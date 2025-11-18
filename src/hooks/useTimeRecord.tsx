@@ -7,9 +7,18 @@ type timeStatusType = 'WORKING' | 'BREAK' | 'FINISHED' | 'NOT_STARTED';
 const useTimeRecord = () => {
   const [timeStatus, setTimeStatus] = useState<timeStatusType>('NOT_STARTED');
 
-  const handleStartWork = () => {
+  const handleStartWork = async () => {
     try {
-      //   const resp = await backendApi.post('/start-work-session', timeData);
+      const dummyStartData: TimeRecordBody = {
+        reqHd: {
+          userId: 1,
+          workDate: '2023-10-10',
+          startTime: '12:00:00',
+          endTime: null,
+        },
+      };
+      const resp = await backendApi.post('/start-work-session', dummyStartData);
+      console.log('Response:', resp.data);
       setTimeStatus('WORKING');
     } catch (error) {
       console.error('Error starting work:', error);
@@ -17,9 +26,11 @@ const useTimeRecord = () => {
     }
   };
 
-  const handleStartBreak = () => {
+  // TODO: Replace dummy data with actual time data when integrating fully
+  const handleStartBreak = async (timeData: TimeRecordBody) => {
     try {
-      //   const resp = backendApi.post('/start-break', timeData);
+      const resp = await backendApi.post('/start-break', dummyStartData);
+      console.log('Response:', resp.data);
       setTimeStatus('BREAK');
     } catch (error) {
       console.error('Error starting break:', error);
@@ -27,9 +38,11 @@ const useTimeRecord = () => {
     }
   };
 
-  const handleEndBreak = () => {
+  // TODO: Replace dummy data with actual time data when integrating fully
+  const handleEndBreak = async (timeData: TimeRecordBody) => {
     try {
-      //   const resp = backendApi.post('/end-break', timeData);
+      const resp = await backendApi.post('/end-break', timeData);
+      console.log('Response:', resp.data);
       setTimeStatus('WORKING');
     } catch (error) {
       console.error('Error ending break:', error);
@@ -37,9 +50,11 @@ const useTimeRecord = () => {
     }
   };
 
-  const handleEndWork = () => {
+  // TODO: Replace dummy data with actual time data when integrating fully
+  const handleEndWork = async (timeData: TimeRecordBody) => {
     try {
-      //   const resp = backendApi.post('/end-work-session', timeData);
+      const resp = await backendApi.post('/end-work-session', timeData);
+      console.log('Response:', resp.data);
       setTimeStatus('FINISHED');
     } catch (error) {
       console.error('Error ending work:', error);
