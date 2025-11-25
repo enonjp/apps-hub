@@ -29,7 +29,7 @@ const CustomPopover = ({ trigger, children }: Props) => {
   }, []);
   return (
     <div>
-      <div className='relative' ref={popOverRef}>
+      <div className='relative z-50' ref={popOverRef}>
         <div onClick={onPopperToggle}>{trigger}</div>
         <div
           style={{
