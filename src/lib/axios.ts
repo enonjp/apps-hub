@@ -18,4 +18,15 @@ backendApi.interceptors.request.use((config) => {
   return config;
 });
 
+backendApi.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      window.localStorage.removeItem('token-appcenter');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default backendApi;
