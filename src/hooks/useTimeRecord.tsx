@@ -1,12 +1,36 @@
 import backendApi from '@/lib/axios';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import dayjs from 'dayjs';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 type timeStatusType = 'WORKING' | 'BREAK' | 'FINISHED' | 'NOT_STARTED';
 
 const useTimeRecord = () => {
+  const { handleSetMinutesOnBreak, handleSetMinutesWorking, minutesWorking } =
+    useGlobalContext();
   const [timeStatus, setTimeStatus] = useState<timeStatusType>('NOT_STARTED');
+  const workTimeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const breakTimeTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup function
+  const clearTimers = () => {
+    if (workTimeTimerRef.current) {
+      clearTimeout(workTimeTimerRef.current);
+      workTimeTimerRef.current = null;
+    }
+    if (breakTimeTimerRef.current) {
+      clearTimeout(breakTimeTimerRef.current);
+      breakTimeTimerRef.current = null;
+    }
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      clearTimers();
+    };
+  }, []);
 
   const handleStartWork = async () => {
     try {
@@ -19,7 +43,17 @@ const useTimeRecord = () => {
         },
       };
       await backendApi.post('/start-work-session', startWorkBody);
+      clearTimers();
+
+      workTimeTimerRef.current = setInterval(() => {
+        console.log(minutesWorking);
+        handleSetMinutesWorking((prev: number) => {
+          return prev + 1;
+        });
+      }, 60000); // Increment every minute
+
       setTimeStatus('WORKING');
+      toast.success('Work session started!');
     } catch (error) {
       console.error('Error starting work:', error);
       toast.error('Failed to start work. Please try again.');
@@ -37,6 +71,12 @@ const useTimeRecord = () => {
         },
       };
       await backendApi.post('/start-break', startBreakBody);
+      clearTimers();
+
+      breakTimeTimerRef.current = setInterval(() => {
+        handleSetMinutesOnBreak((prev: number) => prev + 1);
+      }, 60000); // Increment every minute
+      toast.success('Break started!');
       setTimeStatus('BREAK');
     } catch (error) {
       console.error('Error starting break:', error);
@@ -56,6 +96,13 @@ const useTimeRecord = () => {
       };
 
       await backendApi.post('/end-break', endBreakBody);
+      clearTimers();
+
+      workTimeTimerRef.current = setInterval(() => {
+        handleSetMinutesWorking((prev: number) => prev + 1);
+      }, 60000); // Increment every minute
+
+      toast.success('Break ended!');
       setTimeStatus('WORKING');
     } catch (error) {
       console.error('Error ending break:', error);
@@ -74,6 +121,8 @@ const useTimeRecord = () => {
         },
       };
       await backendApi.post('/end-work-session', endWorkBody);
+      clearTimers();
+      toast.success('Work session ended!');
       setTimeStatus('FINISHED');
     } catch (error) {
       console.error('Error ending work:', error);

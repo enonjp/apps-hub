@@ -1,9 +1,10 @@
 import CustomModal from '@/components/CustomModal';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaSquare, FaPlay, FaPause } from 'react-icons/fa';
 import TimeRecordTable from './TimeRecordTable';
 import useTimeRecord from '@/hooks/useTimeRecord';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 const TimeRecordPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +15,10 @@ const TimeRecordPage = () => {
     handleEndBreak,
     handleEndWork,
   } = useTimeRecord();
+  const { getBreakTimeFormatted, getWorkingTimeFormatted, minutesWorking } =
+    useGlobalContext();
+
+  const [workTime, setWorkTime] = useState('00:00');
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -22,6 +27,11 @@ const TimeRecordPage = () => {
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const workString = getWorkingTimeFormatted();
+    setWorkTime(workString);
+  }, [minutesWorking, getWorkingTimeFormatted]);
 
   return (
     <div className=' max-w-sm mx-auto'>
@@ -41,7 +51,7 @@ const TimeRecordPage = () => {
         </div>
         <div className='col-start-2 col-end-3 row-start-1 row-end-5 w-full h-full rounded-full relative'>
           <div className='flex justify-center pb-2 absolute top-0 -translate-y-8 left-2/4 transform -translate-x-1/2'>
-            <span className=' text-xl'>00:00</span>
+            <span className=' text-xl'>{workTime}</span>
           </div>
           <button
             onClick={handleStartWork}
@@ -58,7 +68,7 @@ const TimeRecordPage = () => {
         </div>
         <div className='col-start-3 col-end-4 row-start-5 row-end-9 w-full h-full rounded-full relative '>
           <div className='flex justify-center pb-2 absolute top-0 -translate-y-8 left-2/4 transform -translate-x-1/2'>
-            <span className=' text-xl'>00:00</span>
+            <span className=' text-xl'>{getBreakTimeFormatted()}</span>
           </div>
           <button
             onClick={handleStartBreak}
