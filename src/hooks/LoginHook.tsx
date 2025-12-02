@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { handleSetIsAuthenticated } = useGlobalContext();
+  const { handleSetIsAuthenticated, handleSetUserId } = useGlobalContext();
 
   const handleLoginRequest = async (email: string, password: string) => {
     try {
@@ -17,8 +17,11 @@ const useLogin = () => {
         password,
       });
       const token = resp.data.accessToken;
+      const userId = resp.data.id;
       window.localStorage.setItem('token-appcenter', token);
+      window.localStorage.setItem('userId-appcenter', userId.toString());
       handleSetIsAuthenticated(true);
+      handleSetUserId(userId || null);
       toast.success('Login successful!');
       navigate({ to: '/' });
     } catch (error) {

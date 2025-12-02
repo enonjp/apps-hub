@@ -8,17 +8,22 @@ import { useGlobalContext } from '@/context/GlobalContext';
 
 const TimeRecordPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [workTime, setWorkTime] = useState('00:00');
+
   const {
     timeStatus,
     handleStartWork,
     handleStartBreak,
     handleEndBreak,
     handleEndWork,
+    handleGetAllTodayRecords,
   } = useTimeRecord();
-  const { getBreakTimeFormatted, getWorkingTimeFormatted, minutesWorking } =
-    useGlobalContext();
-
-  const [workTime, setWorkTime] = useState('00:00');
+  const {
+    getBreakTimeFormatted,
+    getWorkingTimeFormatted,
+    minutesWorking,
+    userId,
+  } = useGlobalContext();
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -32,6 +37,12 @@ const TimeRecordPage = () => {
     const workString = getWorkingTimeFormatted();
     setWorkTime(workString);
   }, [minutesWorking, getWorkingTimeFormatted]);
+
+  useEffect(() => {
+    if (userId) {
+      handleGetAllTodayRecords();
+    }
+  }, [userId, handleGetAllTodayRecords]);
 
   return (
     <div className=' max-w-sm mx-auto'>

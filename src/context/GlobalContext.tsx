@@ -12,6 +12,8 @@ interface AuthContextType {
   handleSetMinutesOnBreak: (minutes: number) => void;
   getWorkingTimeFormatted: () => string;
   getBreakTimeFormatted: () => string;
+  userId: number | null;
+  handleSetUserId: (id: number | null) => void;
 }
 
 interface AuthProviderProps {
@@ -26,6 +28,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 // Custom hook to use the auth context
 export const GlobalContextProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
   const navigation = useNavigate();
   const [minutesWorking, setMinutesWorking] = useState(0);
   const [minutesOnBreak, setMinutesOnBreak] = useState(0);
@@ -70,19 +73,25 @@ export const GlobalContextProvider = ({ children }: AuthProviderProps) => {
 
   // Handle authentication state
 
+  const handleSetUserId = (id: number | null) => {
+    setUserId(id);
+  };
+
   const handleSetIsAuthenticated = (isAuth: boolean) => {
     setIsAuthenticated(isAuth);
   };
 
   useEffect(() => {
     const token = window.localStorage.getItem('token-appcenter');
+    const storedUserId = window.localStorage.getItem('userId-appcenter');
     if (token) {
       setIsAuthenticated(true);
+      handleSetUserId(storedUserId ? parseInt(storedUserId, 10) : null);
     } else {
       setIsAuthenticated(false);
       navigation({ to: '/login' });
     }
-  }, []);
+  }, [navigation]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -90,7 +99,7 @@ export const GlobalContextProvider = ({ children }: AuthProviderProps) => {
     } else {
       navigation({ to: '/' });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigation]);
 
   return (
     <AuthContext.Provider
@@ -103,6 +112,8 @@ export const GlobalContextProvider = ({ children }: AuthProviderProps) => {
         handleSetMinutesOnBreak,
         getWorkingTimeFormatted,
         getBreakTimeFormatted,
+        userId,
+        handleSetUserId,
       }}
     >
       {children}

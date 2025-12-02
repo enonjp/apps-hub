@@ -7,8 +7,12 @@ import { useGlobalContext } from '@/context/GlobalContext';
 type timeStatusType = 'WORKING' | 'BREAK' | 'FINISHED' | 'NOT_STARTED';
 
 const useTimeRecord = () => {
-  const { handleSetMinutesOnBreak, handleSetMinutesWorking, minutesWorking } =
-    useGlobalContext();
+  const {
+    handleSetMinutesOnBreak,
+    handleSetMinutesWorking,
+    minutesWorking,
+    userId,
+  } = useGlobalContext();
   const [timeStatus, setTimeStatus] = useState<timeStatusType>('NOT_STARTED');
   const workTimeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const breakTimeTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -86,9 +90,12 @@ const useTimeRecord = () => {
 
   const handleEndBreak = async () => {
     try {
+      if (userId === null) {
+        throw new Error('User ID is null');
+      }
       const endBreakBody: TimeRecordBody = {
         reqHd: {
-          userId: 1,
+          userId: userId,
           workDate: dayjs().format('YYYY-MM-DD'),
           startTime: dayjs().format('HH:mm:ss'),
           endTime: null,
@@ -130,12 +137,29 @@ const useTimeRecord = () => {
     }
   };
 
+  const handleGetAllTodayRecords = async () => {
+    try {
+      const resp = await backendApi.post('/get-today-sessions', {
+        params: {
+          reqHd: {
+            userId: userId,
+          },
+        },
+      });
+      console.log('Today records:', resp.data);
+    } catch (error) {
+      console.error('Error fetching today records:', error);
+      toast.error('Failed to fetch today records. Please try again.');
+    }
+  };
+
   return {
     timeStatus,
     handleStartWork,
     handleStartBreak,
     handleEndBreak,
     handleEndWork,
+    handleGetAllTodayRecords,
   };
 };
 

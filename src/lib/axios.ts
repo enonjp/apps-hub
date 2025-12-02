@@ -23,6 +23,7 @@ backendApi.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       window.localStorage.removeItem('token-appcenter');
+      window.localStorage.removeItem('userId-appcenter');
       window.location.href = '/login';
     }
     return Promise.reject(error);
