@@ -42,7 +42,7 @@ const TimeRecordPage = () => {
     if (userId) {
       handleGetAllTodayRecords();
     }
-  }, [userId, handleGetAllTodayRecords]);
+  }, [userId]);
 
   return (
     <div className=' max-w-sm mx-auto'>

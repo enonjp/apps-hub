@@ -139,10 +139,10 @@ const useTimeRecord = () => {
 
   const handleGetAllTodayRecords = async () => {
     try {
-      const resp = await backendApi.post('/get-today-sessions', {
+      const resp = await backendApi.post('/get-latest-session', {
         params: {
           reqHd: {
-            userId: userId,
+            userId: 1,
           },
         },
       });
